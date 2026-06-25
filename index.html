@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MO | Creative Content Creator & Videographer</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base & Reset */
+        :root {
+            --bg-color: #030303;
+            --surface-color: rgba(25, 25, 25, 0.3);
+            --text-main: #f0f0f0;
+            --text-muted: #7a7a7a;
+            --accent: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 { margin: 0; font-weight: 400; letter-spacing: -0.04em; }
+        p { line-height: 1.7; }
+        
+        .mono { font-family: 'Courier Prime', monospace; }
+
+        /* Loader */
+        .loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background: var(--bg-color);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 99999;
+        }
+        
+        .loader-text {
+            font-size: 1.2rem; font-weight: 300; letter-spacing: 0.3em;
+            color: var(--text-muted);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 20px 200px 20px;
+            position: relative;
+        }
+
+        /* Navigation */
+        .side-nav {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 15px 35px;
+            display: flex;
+            gap: 45px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            z-index: 100;
+        }
+
+        .side-nav a {
+            color: #555;
+            transition: all 0.4s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        .side-nav a:hover, .side-nav a.active { 
+            color: var(--accent); 
+        }
+
+        /* Hero Section */
+        .hero-section { 
+            text-align: center; 
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .hero-text { opacity: 0; transform: translateY(20px); }
+        .hero-section h1 { 
+            font-size: clamp(3rem, 8vw, 5.5rem); 
+            font-weight: 500; 
+            letter-spacing: -0.05em; 
+            line-height: 1; 
+            margin-bottom: 25px;
+        }
+        .hero-section .subtitle { 
+            font-size: clamp(0.85rem, 1.5vw, 1.1rem); 
+            color: var(--text-muted); 
+            font-weight: 400; 
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        /* Sections & Dividers */
+        .divider {
+            margin: 150px 0 80px 0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+        }
+        
+        .divider::after { 
+            content: ''; height: 1px; flex: 1; background-color: var(--glass-border); 
+        }
+
+        /* About Layout */
+        .about-layout {
+            display: flex; gap: 80px; align-items: flex-start;
+        }
+
+        .about-left { flex: 1; }
+        .profile-img {
+            width: 100%; aspect-ratio: 3/4; object-fit: cover;
+            border-radius: 4px;
+            filter: grayscale(100%) contrast(120%);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .profile-img:hover { filter: grayscale(0%) contrast(105%); transform: scale(1.02); }
+
+        .about-right { flex: 1.2; }
+        
+        .section-title {
+            font-size: 2rem; margin-bottom: 30px; color: var(--accent); font-weight: 400;
+        }
+
+        .bio-text {
+            font-size: 1.15rem; color: #999; line-height: 1.8; margin-bottom: 50px; font-weight: 300;
+        }
+
+        .skills-list {
+            display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 80px;
+        }
+        
+        .skill-tag {
+            border: 1px solid var(--glass-border); padding: 8px 20px; border-radius: 4px;
+            font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em;
+        }
+
+        .experience-item { margin-bottom: 40px; }
+        .exp-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+        .exp-title { font-size: 1.3rem; font-weight: 400; color: var(--accent); }
+        .exp-date { font-size: 0.8rem; color: #555; letter-spacing: 0.1em; text-transform: uppercase; }
+        .exp-role { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 12px; font-weight: 300;}
+        .exp-desc { font-size: 0.95rem; color: #888; font-weight: 300; line-height: 1.6;}
+
+        /* Projects - Editorial Cards */
+        .project-category-card { 
+            background: transparent; border: 1px solid var(--glass-border); border-radius: 4px;
+            margin-bottom: 25px; opacity: 0; display: flex; align-items: center; justify-content: space-between;
+            padding: 50px; cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative; overflow: hidden;
+        }
+
+        .project-category-card::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.02); opacity: 0; transition: opacity 0.5s ease;
+        }
+
+        .project-category-card:hover { border-color: rgba(255,255,255,0.15); }
+        .project-category-card:hover::after { opacity: 1; }
+
+        .category-info h3 { font-size: 1.8rem; margin-bottom: 12px; z-index: 2; position: relative;}
+        .category-info p { color: var(--text-muted); font-size: 1rem; font-weight: 300; z-index: 2; position: relative;}
+        .category-icon { color: #444; transition: color 0.5s ease; z-index: 2; position: relative;}
+        .project-category-card:hover .category-icon { color: var(--accent); }
+
+        /* Contact Section */
+        .contact-section { text-align: left; max-width: 700px; margin: 0 auto;}
+        .contact-headline { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 20px;}
+        
+        .contact-info-block { margin-bottom: 60px; }
+        .contact-email { font-size: 1.2rem; color: var(--text-muted); display: block; text-decoration: none; margin-bottom: 5px; transition: color 0.3s ease;}
+        .contact-email:hover { color: var(--accent); }
+        .contact-phone { font-size: 1.2rem; color: var(--text-muted); font-weight: 300; display: block;}
+        
+        .resume-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            color: var(--bg-color); background: var(--accent);
+            text-decoration: none; padding: 18px 40px; border-radius: 4px;
+            font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em;
+            transition: all 0.4s ease; margin-bottom: 80px; width: max-content;
+        }
+        .resume-btn:hover { background: #d0d0d0; }
+
+        /* Ultra-Minimalist Form */
+        .contact-form { width: 100%; }
+        .input-group { display: flex; gap: 40px; margin-bottom: 40px; }
+        .contact-form input, .contact-form textarea {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #333;
+            padding: 15px 0; color: var(--text-main); font-family: inherit; font-size: 1.1rem; 
+            outline: none; transition: border-color 0.4s ease; box-sizing: border-box; font-weight: 300;
+        }
+        .contact-form input::placeholder, .contact-form textarea::placeholder { color: #555; }
+        .contact-form input:focus, .contact-form textarea:focus { border-bottom-color: var(--accent); }
+        
+        .submit-btn {
+            background: transparent; color: var(--accent); border: 1px solid var(--accent); 
+            padding: 18px 50px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;
+            text-transform: uppercase; letter-spacing: 0.15em; transition: all 0.4s ease; margin-top: 20px;
+        }
+        .submit-btn:hover { background: var(--accent); color: var(--bg-color); }
+
+        .scroll-anim { will-change: transform, opacity; }
+
+        /* Premium Modals & Galleries */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.98); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            z-index: 10000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-content {
+            width: 100%; height: 100%;
+            position: relative; display: flex; flex-direction: column; justify-content: center;
+            transform: translateY(20px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0;
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0); opacity: 1; }
+
+        .close-modal {
+            position: absolute; top: 40px; right: 50px;
+            font-size: 2.5rem; cursor: pointer; color: #555;
+            line-height: 1; transition: color 0.4s ease; z-index: 10; font-weight: 300;
+        }
+        .close-modal:hover { color: var(--accent); }
+
+        .modal-header { text-align: center; margin-bottom: 50px; position: absolute; top: 50px; width: 100%; pointer-events: none;}
+        .modal-header h2 { font-size: 1.2rem; color: var(--text-muted); letter-spacing: 0.2em; text-transform: uppercase;}
+
+        .gallery-slider {
+            display: flex; gap: 80px; overflow-x: auto; padding: 0 15vw;
+            -webkit-overflow-scrolling: touch; cursor: grab; scrollbar-width: none; align-items: center; height: 100%;
+        }
+        .gallery-slider::-webkit-scrollbar { display: none; }
+        .gallery-slider:active { cursor: grabbing; }
+
+        .gallery-item {
+            flex: 0 0 auto; width: max-content; min-width: 300px; max-width: 70vw;
+            position: relative; user-select: none; display: flex; flex-direction: column;
+        }
+
+        .gallery-item video, .gallery-item img {
+            width: auto; height: 65vh; max-width: 100%; object-fit: contain;
+            border-radius: 2px; margin: 0 auto 30px auto; background: transparent;
+            display: block; pointer-events: auto;
+        }
+
+        .gallery-info { text-align: center; }
+        .gallery-info h4 { font-size: 1.4rem; color: var(--accent); margin-bottom: 10px; font-weight: 400;}
+        .gallery-info p { font-size: 0.95rem; color: #666; font-weight: 300; letter-spacing: 0.05em;}
+
+        @media (max-width: 768px) {
+            .container { padding: 60px 20px 150px 20px; }
+            .about-layout { flex-direction: column; gap: 50px;}
+            .about-right { flex: none; width: 100%; }
+            .project-category-card { flex-direction: column; text-align: left; align-items: flex-start; padding: 35px 25px; gap: 20px;}
+            .input-group { flex-direction: column; gap: 40px; }
+            .gallery-item video, .gallery-item img { height: 55vh; }
+            .side-nav { width: 85vw; padding: 15px 20px; gap: 30px; bottom: 30px;}
+            .close-modal { top: 20px; right: 25px; }
+            .modal-header { top: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader">
+        <div class="loader-text">MOHAMMEDAHMED</div>
+    </div>
+
+    <!-- Video Slider Modal (5 Videos Only) -->
+    <div class="modal-overlay" id="videoModal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="mono">Production & Editing</h2>
+            </div>
+            <div class="gallery-slider">
+                <!-- Video 1 -->
+                <div class="gallery-item">
+                    <video controls playsinline preload="metadata" src="video_vision_travel.mp4"></video>
+                    <div class="gallery-info">
+                        <h4>Vision</h4>
+                        <p>Cinematic Production & Color Grading</p>
+                    </div>
+                </div>
+                <!-- Video 2 -->
+                <div class="gallery-item">
+                    <video controls playsinline preload="metadata" src="video_social_1.mp4"></video>
+                    <div class="gallery-info">
+                        <h4>Social Media Reel 01</h4>
+                        <p>Fast-paced Editing & Retention</p>
+                    </div>
+                </div>
+                <!-- Video 3 -->
+                <div class="gallery-item">
+                    <video controls playsinline preload="metadata" src="video_social_2.mp4"></video>
+                    <div class="gallery-info">
+                        <h4>Social Media Reel 02</h4>
+                        <p>Storytelling & Transitions</p>
+                    </div>
+                </div>
+                <!-- Video 4 -->
+                <div class="gallery-item">
+                    <video controls playsinline preload="metadata" src="video_social_3.mp4"></video>
+                    <div class="gallery-info">
+                        <h4>Social Media Reel 03</h4>
+                        <p>Dynamic Content Repurposing</p>
+                    </div>
+                </div>
+                <!-- Video 5 -->
+                <div class="gallery-item">
+                    <video controls playsinline preload="metadata" src="video_social_4.mp4"></video>
+                    <div class="gallery-info">
+                        <h4>Social Media Reel 04</h4>
+                        <p>Short-form Brand Identity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Slider Modal -->
+    <div class="modal-overlay" id="photoModal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="mono">Documentary Photography</h2>
+            </div>
+            <div class="gallery-slider">
+                <div class="gallery-item">
+                    <img src="photo_volley1.jpeg" alt="Volleyball">
+                    <div class="gallery-info">
+                        <h4>Volleyball Match</h4>
+                        <p>Sports & Action in Real Locations</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="photo_volley2.jpeg" alt="Volleyball">
+                    <div class="gallery-info">
+                        <h4>The Final Point</h4>
+                        <p>Capturing Authentic Emotion</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="photo_kitchen1.jpg" alt="Charity Kitchen">
+                    <div class="gallery-info">
+                        <h4>Charity Kitchen</h4>
+                        <p>Field Documentary Coverage</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="photo_kitchen2.jpg" alt="Charity Kitchen">
+                    <div class="gallery-info">
+                        <h4>Community Support</h4>
+                        <p>Working Solo in Dynamic Environments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-nav">
+        <a href="#home" class="active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></a>
+        <a href="#about"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="7" r="4"></circle><path d="M5.5 21v-2a4 4 0 0 1 4-4h5a4 4 0 0 1 4 4v2"></path></svg></a>
+        <a href="#projects"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></a>
+        <a href="#contact"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path></svg></a>
+    </div>
+
+    <div class="container">
+        
+        <section id="home" class="hero-section">
+            <h1 class="hero-text">MOHAMMEDAHMED.</h1>
+            <p class="subtitle hero-text mono">Creative Content Creator & Editor</p>
+        </section>
+
+        <section id="about">
+            <div class="divider scroll-anim">Profile</div>
+            
+            <div class="about-layout scroll-anim">
+                <div class="about-left">
+                    <img src="me.jpeg" alt="Mohammedahmed" class="profile-img">
+                </div>
+
+                <div class="about-right">
+                    <h2 class="section-title">Crafting High-End Visuals & Engaging Content.</h2>
+                    <p class="bio-text">
+                        I am a Kampala-based Videographer and Video Editor specializing in end-to-end production. From operating solo in real locations—managing lighting, framing, and clean audio—to delivering fast, clean edits with strong storytelling instincts. I excel at taking raw concepts and repurposing them into high-retention short-form reels and cinematic narratives.
+                    </p>
+
+                    <div class="skills-list">
+                        <div class="skill-tag">Videography & Production</div>
+                        <div class="skill-tag">Fast & Clean Editing</div>
+                        <div class="skill-tag">Short-form Reels</div>
+                        <div class="skill-tag">Cinematic Color Grading</div>
+                        <div class="skill-tag">Solo Execution</div>
+                        <div class="skill-tag">Audio & Lighting Setup</div>
+                        <div class="skill-tag">Premiere Pro</div>
+                        <div class="skill-tag">DaVinci Resolve</div>
+                    </div>
+
+                    <h3 class="section-title" style="font-size: 1.2rem; margin-top: 60px; color: #fff;">Selected Experience</h3>
+                    
+                    <div class="experience-item">
+                        <div class="exp-header">
+                            <div class="exp-title">Creative Content Creator & Editor</div>
+                            <div class="exp-date">Oct 2023 - Present</div>
+                        </div>
+                        <div class="exp-role">Various Clients & Organizations</div>
+                        <div class="exp-desc">Directing solo productions, capturing content in diverse real-world locations, and executing fast-paced, clean edits tailored for strong pacing and brand retention across social media platforms.</div>
+                    </div>
+
+                    <div class="experience-item">
+                        <div class="exp-header">
+                            <div class="exp-title">Documentary Photographer</div>
+                            <div class="exp-date">2022 - Present</div>
+                        </div>
+                        <div class="exp-role">Independent Projects</div>
+                        <div class="exp-desc">Shooting high-quality visuals in dynamic environments, demonstrating strong comfort behind the camera during events, street photography, and real-life action scenarios.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="divider scroll-anim">Selected Works</div>
+            
+            <div class="project-category-card scroll-anim open-modal-btn" data-target="videoModal">
+                <div class="category-info">
+                    <h3>Videography & Editing</h3>
+                    <p class="mono">Cinematic projects, short-form reels, and pacing.</p>
+                </div>
+                <div class="category-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                </div>
+            </div>
+
+            <div class="project-category-card scroll-anim open-modal-btn" data-target="photoModal">
+                <div class="category-info">
+                    <h3>Photography Production</h3>
+                    <p class="mono">Real locations, events, and dynamic environments.</p>
+                </div>
+                <div class="category-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section scroll-anim">
+            <div class="divider">Get in touch</div>
+            
+            <h2 class="contact-headline">Let's build strong visual identities together.</h2>
+            
+            <div class="contact-info-block">
+                <a href="mailto:mohammedahmed.ali.ug@gmail.com" class="contact-email">mohammedahmed.ali.ug@gmail.com</a>
+                <span class="contact-phone">+256 772 761 620</span>
+            </div>
+            
+            <a href="resume.pdf" class="resume-btn" target="_blank">View Resume</a>
+
+            <form action="https://formsubmit.co/mohammedahmed.ali.ug@gmail.com" method="POST" class="contact-form">
+                <input type="hidden" name="_captcha" value="false">
+                
+                <div class="input-group">
+                    <input type="text" name="name" placeholder="Name" required>
+                    <input type="email" name="email" placeholder="Email Address" required>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <textarea rows="1" name="message" placeholder="Project Details / Inquiry" required style="resize: none;"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </section>
+
+    </div>
+
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        const lenis = new Lenis({ duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+
+        document.querySelectorAll('.side-nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    lenis.scrollTo(targetElement, { duration: 1.5 });
+                    document.querySelectorAll('.side-nav a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        const modals = document.querySelectorAll('.modal-overlay');
+        const openBtns = document.querySelectorAll('.open-modal-btn');
+        const closeBtns = document.querySelectorAll('.close-modal');
+
+        openBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+                lenis.stop();
+            });
+        });
+
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.closest('.modal-overlay').classList.remove('active');
+                const videos = btn.closest('.modal-overlay').querySelectorAll('video');
+                videos.forEach(video => video.pause());
+                lenis.start();
+            });
+        });
+
+        modals.forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) {
+                    modal.classList.remove('active');
+                    const videos = modal.querySelectorAll('video');
+                    videos.forEach(video => video.pause());
+                    lenis.start();
+                }
+            });
+        });
+
+        const sliders = document.querySelectorAll('.gallery-slider');
+        sliders.forEach(slider => {
+            let isDown = false, startX, scrollLeft;
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft;
+            });
+            slider.addEventListener('mouseleave', () => { isDown = false; });
+            slider.addEventListener('mouseup', () => { isDown = false; });
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                slider.scrollLeft = scrollLeft - (x - startX) * 2; 
+            });
+            slider.addEventListener('wheel', (e) => {
+                e.preventDefault(); slider.scrollLeft += e.deltaY;
+            });
+        });
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        const tl = gsap.timeline();
+        tl.to('.loader-text', { opacity: 0, duration: 0.5, delay: 1 });
+        tl.to('.loader', { opacity: 0, duration: 1, ease: "power2.inOut", onComplete: () => document.querySelector('.loader').style.display = 'none' });
+        tl.to('.hero-text', { opacity: 1, y: 0, duration: 1.2, stagger: 0.3, ease: "power3.out" }, "-=0.5");
+
+        gsap.utils.toArray('.scroll-anim').forEach(element => {
+            gsap.fromTo(element, 
+                { opacity: 0, y: 40 }, 
+                { opacity: 1, y: 0, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: element, start: "top 85%" } }
+            );
+        });
+    </script>
+</body>
+</html>
